@@ -4,36 +4,53 @@
 document.addEventListener('DOMContentLoaded', function() {
     const calculateBtn = document.getElementById('calculate-btn');
     const resultContainer = document.getElementById('result-container');
-    
+
     if (calculateBtn) {
         calculateBtn.addEventListener('click', calculateBP);
     }
-    
+
     // Allow Enter key to calculate
-    document.getElementById('systolic')?.addEventListener('keypress', function(e) {
-        if (e.key === 'Enter') calculateBP();
-    });
-    document.getElementById('diastolic')?.addEventListener('keypress', function(e) {
-        if (e.key === 'Enter') calculateBP();
-    });
+    const systolicInput = document.getElementById('systolic');
+    const diastolicInput = document.getElementById('diastolic');
+
+    if (systolicInput) {
+        systolicInput.addEventListener('keypress', function(e) {
+            if (e.key === 'Enter') calculateBP();
+        });
+    }
+
+    if (diastolicInput) {
+        diastolicInput.addEventListener('keypress', function(e) {
+            if (e.key === 'Enter') calculateBP();
+        });
+    }
 });
 
 function calculateBP() {
-    const systolic = parseInt(document.getElementById('systolic').value);
-    const diastolic = parseInt(document.getElementById('diastolic').value);
-    
+    const systolicInput = document.getElementById('systolic');
+    const diastolicInput = document.getElementById('diastolic');
+    const resultContainer = document.getElementById('result-container');
+
+    if (!systolicInput || !diastolicInput || !resultContainer) {
+        console.error('Required elements not found');
+        return;
+    }
+
+    const systolic = parseInt(systolicInput.value);
+    const diastolic = parseInt(diastolicInput.value);
+
     if (!systolic || !diastolic) {
         alert('Please enter both systolic and diastolic readings');
         return;
     }
-    
+
     if (systolic < 70 || systolic > 250 || diastolic < 40 || diastolic > 150) {
         alert('Please enter valid readings (Systolic: 70-250, Diastolic: 40-150)');
         return;
     }
-    
+
     let category, colorClass, gaugePercent, riskText, recommendations;
-    
+
     // Determine category based on AHA guidelines
     if (systolic > 180 || diastolic > 120) {
         category = 'Hypertensive Crisis';
@@ -90,24 +107,39 @@ function calculateBP() {
             'Cardioton can help maintain optimal levels'
         ];
     }
-    
-    // Update UI
+
+    // Update UI - Get correct elements
+    const categoryEl = document.getElementById('result-category');
+    const readingEl = document.getElementById('result-reading');
+    const messageEl = document.getElementById('result-message');
+    const recommendationList = document.getElementById('recommendation-list');
+
+    // Remove hidden class and add color class
     resultContainer.classList.remove('hidden');
-    resultContainer.className = 'result-container ' + colorClass;
-    
-    document.getElementById('bp-category').textContent = category;
-    document.getElementById('bp-reading').textContent = `${systolic}/${diastolic} mmHg`;
-    document.getElementById('risk-text').textContent = riskText;
-    
+
+    // Remove existing color classes
+    resultContainer.classList.remove('normal', 'caution', 'warning', 'danger', 'crisis');
+    // Add new color class
+    resultContainer.classList.add(colorClass);
+
+    // Update text content
+    if (categoryEl) categoryEl.textContent = category;
+    if (readingEl) readingEl.textContent = `${systolic}/${diastolic} mmHg`;
+    if (messageEl) messageEl.textContent = riskText;
+
     // Animate gauge
-    setTimeout(() => {
-        document.getElementById('gauge-fill').style.width = gaugePercent + '%';
-    }, 100);
-    
+    const gaugeFill = document.getElementById('gauge-fill');
+    if (gaugeFill) {
+        setTimeout(() => {
+            gaugeFill.style.width = gaugePercent + '%';
+        }, 100);
+    }
+
     // Build recommendations
-    const recList = document.getElementById('recommendations');
-    recList.innerHTML = recommendations.map(rec => `<li>${rec}</li>`).join('');
-    
+    if (recommendationList) {
+        recommendationList.innerHTML = recommendations.map(rec => `<li>${rec}</li>`).join('');
+    }
+
     // Scroll to result
     resultContainer.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
 }
@@ -117,13 +149,15 @@ document.addEventListener('DOMContentLoaded', function() {
     const faqItems = document.querySelectorAll('.faq-item');
     faqItems.forEach(item => {
         const question = item.querySelector('.faq-question');
-        question.addEventListener('click', () => {
-            const isOpen = item.classList.contains('open');
-            faqItems.forEach(i => i.classList.remove('open'));
-            if (!isOpen) {
-                item.classList.add('open');
-            }
-        });
+        if (question) {
+            question.addEventListener('click', () => {
+                const isOpen = item.classList.contains('open');
+                faqItems.forEach(i => i.classList.remove('open'));
+                if (!isOpen) {
+                    item.classList.add('open');
+                }
+            });
+        }
     });
 });
 
@@ -132,7 +166,7 @@ function submitOrder(e) {
     e.preventDefault();
     const form = e.target;
     const formData = new FormData(form);
-    
+
     fetch('https://www.itech19.com/cardioton/sendorder19.php', {
         method: 'POST',
         body: formData
@@ -144,3 +178,22 @@ function submitOrder(e) {
         form.innerHTML = '<div class="success-message"><h3>✅ Order Received!</h3><p>Thank you for your order. Our team will call you within 24 hours to confirm.</p></div>';
     });
 }
+
+// Smooth scroll for anchor links
+document.addEventListener('DOMContentLoaded', function() {
+    document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+        anchor.addEventListener('click', function(e) {
+            const targetId = this.getAttribute('href');
+            if (targetId === '#') return;
+
+            const targetElement = document.querySelector(targetId);
+            if (targetElement) {
+                e.preventDefault();
+                targetElement.scrollIntoView({
+                    behavior: 'smooth',
+                    block: 'start'
+                });
+            }
+        });
+    });
+});
