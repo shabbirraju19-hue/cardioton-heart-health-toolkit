@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Cardioton - Ayurvedic heart health supplement. Free Blood Pressure Calculator. Support healthy blood pressure naturally with Cardioton capsules.">
+    <meta name="keywords" content="Cardioton, blood pressure calculator, heart health, ayurvedic medicine, hypertension, BP tracker">
+    <title>Cardioton - Support Your Heart Naturally | Free BP Calculator</title>
+    <link rel="stylesheet" href="assets/style.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+</head>
+<body>
+    <!-- Header -->
+    <header class="header">
+        <div class="container header-content">
+            <div class="logo">
+                <span class="logo-icon">❤️</span>
+                <span class="logo-text">Cardioton</span>
+            </div>
+            <div class="header-badge">50% OFF</div>
+            <a href="#order" class="btn-header">Order Now</a>
+        </div>
+    </header>
+
+    <!-- Hero Section -->
+    <section class="hero">
+        <div class="container">
+            <div class="hero-content">
+                <h1 class="hero-title">Support Your Heart Naturally with Cardioton</h1>
+                <p class="hero-subtitle">Ayurvedic capsules for healthy blood pressure and cardiovascular wellness</p>
+                <div class="hero-cta">
+                    <a href="#order" class="btn-primary">Order Now — 50% OFF</a>
+                    <a href="#calculator" class="btn-secondary">Check Your BP Risk Free</a>
+                </div>
+                <div class="hero-trust">
+                    <span>💚 100% Natural</span>
+                    <span>🇮🇳 Made for India</span>
+                    <span>📦 COD Available</span>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Benefits Grid -->
+    <section class="benefits">
+        <div class="container">
+            <div class="benefits-grid">
+                <div class="benefit-card">
+                    <div class="benefit-icon">❤️</div>
+                    <h3>Supports Healthy Blood Pressure</h3>
+                    <p>Natural ingredients help maintain optimal BP levels within normal range</p>
+                </div>
+                <div class="benefit-card">
+                    <div class="benefit-icon">🩸</div>
+                    <h3>Improves Blood Circulation</h3>
+                    <p>Enhances cardiovascular function and blood flow throughout the body</p>
+                </div>
+                <div class="benefit-card">
+                    <div class="benefit-icon">🌿</div>
+                    <h3>100% Ayurvedic Ingredients</h3>
+                    <p>Formulated with Arjuna, Ashwagandha, Garlic & ancient herbs</p>
+                </div>
+                <div class="benefit-card">
+                    <div class="benefit-icon">📊</div>
+                    <h3>Results in 3-4 Weeks</h3>
+                    <p>Most users report noticeable improvements within the first month</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- BP Calculator Section -->
+    <section id="calculator" class="calculator-section">
+        <div class="container">
+            <div class="section-header">
+                <h2>Check Your Blood Pressure Risk — Free</h2>
+                <p>Enter your readings to see your cardiovascular risk category</p>
+            </div>
+            
+            <div class="calculator-card">
+                <div class="calculator-inputs">
+                    <div class="input-group">
+                        <label for="systolic">Systolic (Top Number)</label>
+                        <input type="number" id="systolic" min="70" max="250" placeholder="e.g., 120">
+                        <span class="input-unit">mmHg</span>
+                    </div>
+                    <div class="input-divider">/</div>
+                    <div class="input-group">
+                        <label for="diastolic">Diastolic (Bottom Number)</label>
+                        <input type="number" id="diastolic" min="40" max="150" placeholder="e.g., 80">
+                        <span class="input-unit">mmHg</span>
+                    </div>
+                </div>
+                
+                <button id="calculate-btn" class="btn-calculate">Calculate My Risk</button>
+                
+                <div id="result-container" class="result-container hidden">
+                    <div class="gauge-container">
+                        <div class="gauge-bg">
+                            <div class="gauge-zones">
+                                <span class="zone normal">Normal</span>
+                                <span class="zone elevated">Elevated</span>
+                                <span class="zone stage1">Stage 1</span>
+                                <span class="zone stage2">Stage 2</span>
+                                <span class="zone crisis">Crisis</span>
+                            </div>
+                            <div class="gauge-bar">
+                                <div id="gauge-fill" class="gauge-fill"></div>
+                                <div id="gauge-marker" class="gauge-marker"></div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div id="result-box" class="result-box">
+                        <div class="result-category" id="result-category">Normal</div>
+                        <div class="result-reading" id="result-reading">120/80 mmHg</div>
+                        <div class="result-message" id="result-message">Your blood pressure is in the healthy range.</div>
+                    </div>
+                    
+                    <div class="recommendations" id="recommendations">
+                        <h4>Personalized Recommendations:</h4>
+                        <ul id="recommendation-list"></ul>
+                    </div>
+                    
+                    <div class="result-cta">
+                        <p>💚 Support your heart naturally with Cardioton</p>
+                        <a href="#order" class="btn-result">Get 50% Off Cardioton →</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
