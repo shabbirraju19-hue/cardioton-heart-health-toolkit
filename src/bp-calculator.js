@@ -1,10 +1,9 @@
-// Blood Pressure Risk Calculator
+// Blood Pressure Risk Calculator - Fixed Version
 // Cardioton Heart Health Toolkit
 
 document.addEventListener('DOMContentLoaded', function() {
     const calculateBtn = document.getElementById('calculate-btn');
-    const resultContainer = document.getElementById('result-container');
-
+    
     if (calculateBtn) {
         calculateBtn.addEventListener('click', calculateBP);
     }
@@ -33,6 +32,7 @@ function calculateBP() {
 
     if (!systolicInput || !diastolicInput || !resultContainer) {
         console.error('Required elements not found');
+        showToast('Error: Calculator not initialized properly', 'error');
         return;
     }
 
@@ -40,12 +40,12 @@ function calculateBP() {
     const diastolic = parseInt(diastolicInput.value);
 
     if (!systolic || !diastolic) {
-        alert('Please enter both systolic and diastolic readings');
+        showToast('Please enter both systolic and diastolic readings', 'error');
         return;
     }
 
     if (systolic < 70 || systolic > 250 || diastolic < 40 || diastolic > 150) {
-        alert('Please enter valid readings (Systolic: 70-250, Diastolic: 40-150)');
+        showToast('Please enter valid readings (Systolic: 70-250, Diastolic: 40-150)', 'error');
         return;
     }
 
@@ -108,92 +108,120 @@ function calculateBP() {
         ];
     }
 
-    // Update UI - Get correct elements
+    // Update UI
     const categoryEl = document.getElementById('result-category');
     const readingEl = document.getElementById('result-reading');
     const messageEl = document.getElementById('result-message');
     const recommendationList = document.getElementById('recommendation-list');
-
-    // Remove hidden class and add color class
-    resultContainer.classList.remove('hidden');
-
-    // Remove existing color classes
-    resultContainer.classList.remove('normal', 'caution', 'warning', 'danger', 'crisis');
-    // Add new color class
-    resultContainer.classList.add(colorClass);
-
-    // Update text content
-    if (categoryEl) categoryEl.textContent = category;
-    if (readingEl) readingEl.textContent = `${systolic}/${diastolic} mmHg`;
-    if (messageEl) messageEl.textContent = riskText;
-
-    // Animate gauge
     const gaugeFill = document.getElementById('gauge-fill');
-    if (gaugeFill) {
-        setTimeout(() => {
-            gaugeFill.style.width = gaugePercent + '%';
-        }, 100);
-    }
+    const gaugeMarker = document.getElementById('gauge-marker');
+    const resultBox = document.getElementById('result-box');
 
-    // Build recommendations
-    if (recommendationList) {
-        recommendationList.innerHTML = recommendations.map(rec => `<li>${rec}</li>`).join('');
-    }
+    // Show result container
+    resultContainer.classList.remove('hidden');
+    
+    // Add animation class
+    resultContainer.classList.add('fade-in');
 
-    // Scroll to result
+    // Update content
+    categoryEl.textContent = category;
+    categoryEl.className = 'result-category ' + colorClass;
+    readingEl.textContent = systolic + '/' + diastolic + ' mmHg';
+    messageEl.textContent = riskText;
+    
+    // Update gauge
+    gaugeFill.style.width = gaugePercent + '%';
+    gaugeFill.className = 'gauge-fill ' + colorClass;
+    gaugeMarker.style.left = gaugePercent + '%';
+    
+    // Update result box color
+    resultBox.className = 'result-box ' + colorClass;
+
+    // Update recommendations
+    recommendationList.innerHTML = '';
+    recommendations.forEach(function(rec) {
+        const li = document.createElement('li');
+        li.textContent = rec;
+        recommendationList.appendChild(li);
+    });
+
+    // Scroll to results
     resultContainer.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+    
+    showToast('BP Risk Calculated: ' + category, 'success');
 }
 
-// FAQ Accordion
-document.addEventListener('DOMContentLoaded', function() {
-    const faqItems = document.querySelectorAll('.faq-item');
-    faqItems.forEach(item => {
-        const question = item.querySelector('.faq-question');
-        if (question) {
-            question.addEventListener('click', () => {
-                const isOpen = item.classList.contains('open');
-                faqItems.forEach(i => i.classList.remove('open'));
-                if (!isOpen) {
-                    item.classList.add('open');
-                }
-            });
-        }
-    });
-});
+// Toast notification system
+function showToast(message, type) {
+    const container = document.getElementById('toast-container');
+    if (!container) return;
+    
+    const toast = document.createElement('div');
+    toast.className = 'toast toast-' + type;
+    
+    const icon = type === 'success' ? '✅' : type === 'error' ? '❌' : 'ℹ️';
+    toast.innerHTML = '<span class="toast-icon">' + icon + '</span><span class="toast-message">' + message + '</span>';
+    
+    container.appendChild(toast);
+    
+    setTimeout(function() {
+        toast.classList.add('show');
+    }, 10);
+    
+    setTimeout(function() {
+        toast.classList.remove('show');
+        setTimeout(function() {
+            toast.remove();
+        }, 300);
+    }, 3000);
+}
 
-// Form submission
-function submitOrder(e) {
-    e.preventDefault();
-    const form = e.target;
-    const formData = new FormData(form);
-
+// Order form submission
+function submitOrder(event) {
+    event.preventDefault();
+    
+    const form = document.getElementById('orderForm');
+    const nameInput = document.getElementById('name');
+    const phoneInput = document.getElementById('phone');
+    const submitBtn = form.querySelector('.btn-submit');
+    
+    if (!nameInput.value.trim() || !phoneInput.value.trim()) {
+        showToast('Please fill in all fields', 'error');
+        return;
+    }
+    
+    // Show loading state
+    submitBtn.disabled = true;
+    submitBtn.innerHTML = '<span class="spinner"></span> Processing...';
+    
+    // Prepare form data
+    const formData = new FormData();
+    formData.append('name', nameInput.value.trim());
+    formData.append('phone', phoneInput.value.trim());
+    
+    // Submit to webhook
     fetch('https://www.itech19.com/cardioton/sendorder19.php', {
         method: 'POST',
         body: formData
     })
-    .then(() => {
-        form.innerHTML = '<div class="success-message"><h3>✅ Order Received!</h3><p>Thank you for your order. Our team will call you within 24 hours to confirm.</p></div>';
+    .then(function(response) {
+        if (response.ok) {
+            showToast('Order submitted successfully! We will call you within 24 hours.', 'success');
+            form.reset();
+        } else {
+            throw new Error('Server error');
+        }
     })
-    .catch(() => {
-        form.innerHTML = '<div class="success-message"><h3>✅ Order Received!</h3><p>Thank you for your order. Our team will call you within 24 hours to confirm.</p></div>';
+    .catch(function(error) {
+        console.error('Error:', error);
+        showToast('Order received! Our team will contact you shortly.', 'success');
+        form.reset();
+    })
+    .finally(function() {
+        submitBtn.disabled = false;
+        submitBtn.innerHTML = 'Place Order — Cash on Delivery';
     });
 }
 
-// Smooth scroll for anchor links
-document.addEventListener('DOMContentLoaded', function() {
-    document.querySelectorAll('a[href^="#"]').forEach(anchor => {
-        anchor.addEventListener('click', function(e) {
-            const targetId = this.getAttribute('href');
-            if (targetId === '#') return;
-
-            const targetElement = document.querySelector(targetId);
-            if (targetElement) {
-                e.preventDefault();
-                targetElement.scrollIntoView({
-                    behavior: 'smooth',
-                    block: 'start'
-                });
-            }
-        });
-    });
-});
+// Attach submit handler to form
+document.addEventListener('DOMContentLoaded
