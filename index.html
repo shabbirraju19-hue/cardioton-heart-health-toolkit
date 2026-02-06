@@ -98,48 +98,6 @@
                     </div>
                 </div>
                 
-                <button id="calculate-btn" class="btn-calculate">
-                    <span class="btn-text">Calculate My Risk</span>
-                    <span class="btn-icon">→</span>
-                </button>
-                
-                <div id="result-container" class="result-container hidden">
-                    <div class="gauge-container">
-                        <div class="gauge-bg">
-                            <div class="gauge-zones">
-                                <span class="zone normal">Normal</span>
-                                <span class="zone elevated">Elevated</span>
-                                <span class="zone stage1">Stage 1</span>
-                                <span class="zone stage2">Stage 2</span>
-                                <span class="zone crisis">Crisis</span>
-                            </div>
-                            <div class="gauge-bar">
-                                <div id="gauge-fill" class="gauge-fill"></div>
-                                <div id="gauge-marker" class="gauge-marker"></div>
-                            </div>
-                        </div>
-                    </div>
-                    
-                    <div id="result-box" class="result-box">
-                        <div class="result-category" id="result-category">Normal</div>
-                        <div class="result-reading" id="result-reading">120/80 mmHg</div>
-                        <div class="result-message" id="result-message">Your blood pressure is in the healthy range.</div>
-                    </div>
-                    
-                    <div class="recommendations" id="recommendations">
-                        <h4>💡 Personalized Recommendations:</h4>
-                        <ul id="recommendation-list"></ul>
-                    </div>
-                    
-                    <div class="result-cta">
-                        <p class="cta-text">💚 Support your heart naturally with Cardioton</p>
-                        <a href="#order" class="btn-result">Get 50% Off Cardioton →</a>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </section>
-
     <!-- Order Form Section -->
     <section id="order" class="order-section">
         <div class="container">
@@ -157,4 +115,60 @@
                 </div>
 
                 <form id="orderForm" class="order-form">
-                    <div class="form
+                    <div class="form-group">
+                        <label for="name">Your Name</label>
+                        <input type="text" id="name" name="name" placeholder="Enter your full name" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="phone">Phone Number</label>
+                        <input type="tel" id="phone" name="phone" placeholder="Enter your phone number" required>
+                    </div>
+                    <button type="submit" class="btn-submit">Place Order — Cash on Delivery</button>
+                </form>
+                <div class="trust-badges">
+                    <span>💚 COD Available</span>
+                    <span>🔒 Secure</span>
+                    <span>📞 Confirmation Call</span>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- FAQ Section -->
+    <section class="faq-section">
+        <div class="container">
+            <div class="section-header">
+                <h2>Frequently Asked Questions</h2>
+            </div>
+            <div class="faq-list">
+                <div class="faq-item">
+                    <div class="faq-question">Where to buy Cardioton in India?</div>
+                    <div class="faq-answer">You can order Cardioton directly from our official website with 50% discount and Cash on Delivery available across India.</div>
+                </div>
+                <div class="faq-item">
+                    <div class="faq-question">What is Cardioton price?</div>
+                    <div class="faq-answer">Cardioton is currently available at 50% off the regular price. Check the order section above for the special discounted price.</div>
+                </div>
+                <div class="faq-item">
+                    <div class="faq-question">Is Cardioton ayurvedic medicine safe?</div>
+                    <div class="faq-answer">Yes, Cardioton is made from 100% natural Ayurvedic ingredients. However, consult your doctor before starting any supplement.</div>
+                </div>
+                <div class="faq-item">
+                    <div class="faq-question">How long does Cardioton take to work?</div>
+                    <div class="faq-answer">Most users report noticeable improvements within 3-4 weeks of consistent use.</div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container">
+            <p>&copy; 2026 Cardioton Heart Health Toolkit. All rights reserved.</p>
+            <p class="disclaimer">Disclaimer: This is an educational health resource. Consult a healthcare professional before starting any supplement.</p>
+        </div>
+    </footer>
+
+    <script src="src/bp-calculator.js"></script>
+</body>
+</html>
